@@ -1,5 +1,5 @@
 # PA_Elevator
-Elevator script for UncleJust Vespucci Police Dept MLO
+Elevator script for UncleJust Vespucci Police Dept MLO but you can modify the config for ad or modify elevator
 
 ## Dependancies
 
