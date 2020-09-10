@@ -14,16 +14,16 @@ Citizen.CreateThread(function()
         local isInMarker = false
         local currentZone
         for _,v in pairs(Config.Elevator) do
-            for i=1, #v, 1 do
+            for i=1, #v.floor, 1 do
                 if Config.DisplayMarker then
-                    if GetDistanceBetweenCoords(coords, v[i].Pos, true) <= Config.DrawDistance then
-                        DrawMarker(markerData.Type, v[i].Pos[1], v[i].Pos[2], v[i].Pos[3]-1, 0, 0, 0, 0, 0, 0, markerData.Size.x, markerData.Size.y, markerData.Size.z, markerData.color.r, markerData.color.g, markerData.color.b, markerData.color.a, 0, 0, 2, 0, nil, nil, 0)
+                    if GetDistanceBetweenCoords(coords, v.floor[i].Pos, true) <= Config.DrawDistance then
+                        DrawMarker(markerData.Type, v.floor[i].Pos[1], v.floor[i].Pos[2], v.floor[i].Pos[3]-1, 0, 0, 0, 0, 0, 0, markerData.Size.x, markerData.Size.y, markerData.Size.z, markerData.color.r, markerData.color.g, markerData.color.b, markerData.color.a, 0, 0, 2, 0, nil, nil, 0)
                     end
                 end
-                if GetDistanceBetweenCoords(coords, v[i].Pos, true) <= markerData.Size.x then
+                if GetDistanceBetweenCoords(coords, v.floor[i].Pos, true) <= markerData.Size.x then
                     isInMarker = true
-                    currentZone = v[i].Label
-                    LastZone = v[i].Label
+                    currentZone = v.floor[i].id
+                    LastZone = v.floor[i].Label
                 end
             end
         end
@@ -40,83 +40,15 @@ end)
 
 RegisterNetEvent('PA_Elevator:EnteredMarker')
 AddEventHandler('PA_Elevator:EnteredMarker', function(zone)
-    --Nord
-        if zone == "3ème étage Nord" then
-            CurrentAction = 'nord_3'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
+    for _,v in pairs(Config.Elevator) do
+        for i=1, #v.floor, 1 do
+            if zone == v.floor[i].id then
+                CurrentAction = zone
+            end
         end
-        if zone == "2ème étage Nord" then
-            CurrentAction = 'nord_2'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "1er étage Nord" then
-            CurrentAction = 'nord_1'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "3ème sous-sol Nord" then
-            CurrentAction = 'nord_3ss'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "2ème sous-sol Nord" then
-            CurrentAction = 'nord_2ss'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "1er sous-sol Nord" then
-            CurrentAction = 'nord_1ss'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-    --Sud
-        if zone == "Toit" then
-            CurrentAction = 'sud_roof'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "5ème étage Sud" then
-            CurrentAction = 'sud_5'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "4ème étage Sud" then
-            CurrentAction = 'sud_4'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "3ème étage Sud" then
-            CurrentAction = 'sud_3'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "2ème étage Sud" then
-            CurrentAction = 'sud_2'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "1er étage Sud" then
-            CurrentAction = 'sud_1'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "3ème sous-sol Sud" then
-            CurrentAction = 'sud_3ss'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "2ème sous-sol Sud" then
-            CurrentAction = 'sud_2ss'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
-        if zone == "1er sous-sol Sud" then
-            CurrentAction = 'sud_1ss'
-            CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
-            CurrentActionData = {zone = zone}
-        end
+    end
+    CurrentActionMsg = "Appuyez sur ~INPUT_PICKUP~ pour prendre l'ascenseur"
+    CurrentActionData = {zone = zone}
 end)
 
 RegisterNetEvent('PA_Elevator:ExitedMarker')
@@ -134,24 +66,12 @@ Citizen.CreateThread(function()
         if CurrentAction ~= nil then
             Visual.FloatingHelpText(CurrentActionMsg)
             if IsControlJustPressed(0,51) then
-                if CurrentAction == 'sud_roof' or
-                CurrentAction == 'sud_5' or
-                CurrentAction == 'sud_4' or
-                CurrentAction == 'sud_3' or
-                CurrentAction == 'sud_2'or
-                CurrentAction == 'sud_1' or
-                CurrentAction == 'sud_3ss' or
-                CurrentAction == 'sud_2ss' or
-                CurrentAction == 'sud_1ss' then
-                    RageUI.Visible(RMenu:Get('elevator', 'sud'), true)
-                end
-                if CurrentAction == 'nord_3' or
-                CurrentAction == 'nord_2'or
-                CurrentAction == 'nord_1' or
-                CurrentAction == 'nord_3ss' or
-                CurrentAction == 'nord_2ss' or
-                CurrentAction == 'nord_1ss' then
-                    RageUI.Visible(RMenu:Get('elevator', 'nord'), true)
+                for k,v in pairs(Config.Elevator) do
+                    for i=1, #v.floor, 1 do
+                        if CurrentAction == v.floor[i].id then
+                            RageUI.Visible(RMenu:Get('elevator', k), true)
+                        end
+                    end
                 end
                 CurrentAction = nil
             end
@@ -159,45 +79,36 @@ Citizen.CreateThread(function()
     end
 end)
 
---Menu
-RMenu.Add('elevator', 'sud', RageUI.CreateMenu("Ascenseur sud", "Etage"))
-RMenu:Get('elevator', 'sud'):DisplayGlare(false)
-RMenu.Add('elevator', 'nord', RageUI.CreateMenu("Ascenseur nord", "Etage"))
-RMenu:Get('elevator', 'nord'):DisplayGlare(false)
-
+---Menu
+for k,v in pairs(Config.Elevator) do
+    RMenu.Add('elevator', k, RageUI.CreateMenu(v.label, "Etage"))
+end
+---Menu Param
+for k,_ in pairs(RMenu:GetType('elevator')) do
+    RMenu:GetType('elevator')[k].Menu:DisplayGlare(false)
+    RMenu:GetType('elevator')[k].Menu:DisplayPageCounter(false)
+end
+---Menu Content
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         local playerPed = GetPlayerPed(-1)
-        RageUI.IsVisible(RMenu:Get('elevator', 'sud'), function()
-            RMenu:Get('elevator', 'sud'):SetSubtitle("Etage actuel : "..LastZone)
-            for i=1, #Config.Elevator.Sud, 1 do
-                RageUI.Button(Config.Elevator.Sud[i].Label, Config.Elevator.Sud[i].Description, {}, true, {
-                    onSelected = function()
-                        DoScreenFadeOut(500)
-                        Wait(500)
-                        SetEntityCoords(playerPed, Config.Elevator.Sud[i].Pos[1], Config.Elevator.Sud[i].Pos[2],Config.Elevator.Sud[i].Pos[3]-1)
-                        SetEntityHeading(playerPed, Config.Elevator.Sud[i].Heading)
-                        DoScreenFadeIn(500)
-                        Wait(500)
-                    end
-                })
-            end
-        end)
-        RageUI.IsVisible(RMenu:Get('elevator', 'nord'), function()
-            RMenu:Get('elevator', 'nord'):SetSubtitle("Etage actuel : "..LastZone)
-            for i=1, #Config.Elevator.Nord, 1 do
-                RageUI.Button(Config.Elevator.Nord[i].Label, Config.Elevator.Nord[i].Description, {}, true, {
-                    onSelected = function()
-                        DoScreenFadeOut(500)
-                        Wait(500)
-                        SetEntityCoords(playerPed, Config.Elevator.Nord[i].Pos[1], Config.Elevator.Nord[i].Pos[2],Config.Elevator.Nord[i].Pos[3]-1)
-                        SetEntityHeading(playerPed, Config.Elevator.Nord[i].Heading)
-                        DoScreenFadeIn(500)
-                        Wait(500)
-                    end
-                })
-            end
-        end)
+        for k,v in pairs(Config.Elevator) do
+            RageUI.IsVisible(RMenu:Get('elevator', k), function()
+                RMenu:Get('elevator', k):SetSubtitle("Etage actuel : "..LastZone)
+                for i=1, #v.floor, 1 do
+                    RageUI.Button(v.floor[i].Label, v.floor[i].Description, {}, true, {
+                        onSelected = function()
+                            DoScreenFadeOut(500)
+                            Wait(500)
+                            SetEntityCoords(playerPed, v.floor[i].Pos[1], v.floor[i].Pos[2],v.floor[i].Pos[3]-1)
+                            SetEntityHeading(playerPed, v.floor[i].Heading)
+                            DoScreenFadeIn(500)
+                            Wait(500)
+                        end
+                    })
+                end
+            end)
+        end
     end
 end)
