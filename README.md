@@ -10,4 +10,3 @@ All config are inside config.lua file
 
 ## TODO
 - Add lang configuration system
-- Compact menu logic
