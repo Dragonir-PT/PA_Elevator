@@ -1,13 +1,13 @@
 # PA_Elevator
 Elevator script for UncleJust Vespucci Police Dept MLO
 
-##Dependancies
+## Dependancies
 
 RageUI V2.1 : https://github.com/iTexZoz/RageUI
 
-##Configuration : 
+## Configuration : 
 All config are inside config.lua file
 
-##TODO
+## TODO
 - Add lang configuration system
 - Compact menu logic
