@@ -1,5 +1,8 @@
-local CurrentAction, CurrentActionMsg, CurrentActionData, HasAlreadyInMarker, LastZone = nil, '', {}, false, nil
-
+local CurrentAction
+local CurrentActionMsg = ''
+local CurrentActionData = {}
+local HasAlreadyInMarker = false
+local LastZone
 
 --Draw marker and marker event
 Citizen.CreateThread(function()
