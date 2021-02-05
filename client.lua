@@ -29,17 +29,17 @@ Citizen.CreateThread(function()
         end
         if isInMarker and not HasAlreadyInMarker then
             HasAlreadyInMarker = true
-            TriggerEvent('PA_Elevator:EnteredMarker', currentZone)
+            TriggerEvent('Drago_Elevator:EnteredMarker', currentZone)
         end
         if not isInMarker and HasAlreadyInMarker then
             HasAlreadyInMarker = false
-            TriggerEvent('PA_Elevator:ExitedMarker', LastZone)
+            TriggerEvent('Drago_Elevator:ExitedMarker', LastZone)
         end
     end
 end)
 
-RegisterNetEvent('PA_Elevator:EnteredMarker')
-AddEventHandler('PA_Elevator:EnteredMarker', function(zone)
+RegisterNetEvent('Drago_Elevator:EnteredMarker')
+AddEventHandler('Drago_Elevator:EnteredMarker', function(zone)
     for _,v in pairs(Config.Elevator) do
         for i=1, #v.floor, 1 do
             if zone == v.floor[i].id then
@@ -51,8 +51,8 @@ AddEventHandler('PA_Elevator:EnteredMarker', function(zone)
     CurrentActionData = {zone = zone}
 end)
 
-RegisterNetEvent('PA_Elevator:ExitedMarker')
-AddEventHandler('PA_Elevator:ExitedMarker', function()
+RegisterNetEvent('Drago_Elevator:ExitedMarker')
+AddEventHandler('Drago_Elevator:ExitedMarker', function()
     RageUI.CloseAll()
     CurrentAction = nil
     CurrentActionMsg = ''
